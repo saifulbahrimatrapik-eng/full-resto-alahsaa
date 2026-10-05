@@ -1,0 +1,406 @@
+!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full Food Resto Alahsaa - Order Online</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        resto: {
+                            dark: '#083B1D',
+                            primary: '#0B5129',
+                            light: '#1B6B3A',
+                            accent: '#FFC107',
+                            cream: '#FAF9F5',
+                            card: '#FFFFFF'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F3F4F6;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen text-slate-800 pb-40">
+
+    <header class="bg-resto-dark text-white relative shadow-lg overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        
+        <div class="max-w-md mx-auto px-4 py-6 text-center relative z-10">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-resto-primary border-2 border-resto-accent text-resto-accent text-2xl mb-3 shadow-md">
+                <i class="fa-solid fa-utensils"></i>
+            </div>
+            <h1 class="text-2xl font-black tracking-wide text-resto-accent uppercase drop-shadow-sm">FULL FOOD RESTO</h1>
+            <h2 class="text-xl font-bold tracking-wider text-white uppercase mb-1">ALAHSAA</h2>
+            <div class="inline-block bg-resto-light/80 px-4 py-1 rounded-full border border-resto-accent/30 text-xs text-amber-200 font-semibold tracking-wide shadow-inner">
+                🌿 Lezatnya Menu Nusantara 🌿
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-md mx-auto px-4 mt-4">
+        
+        <!-- Info Alert -->
+        <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 mb-4 flex items-center gap-3 text-xs text-emerald-900 shadow-sm">
+            <div class="bg-emerald-600 text-white w-8 h-8 rounded-lg flex items-center justify-center shrink-0 shadow-sm">
+                <i class="fa-solid fa-basket-shopping text-sm"></i>
+            </div>
+            <div>
+                <p class="font-bold">Pesan Mudah via WhatsApp</p>
+                <p class="text-emerald-700">Pilih menu, atur porsi (+/-), isi data lalu kirim ke WhatsApp Resto!</p>
+            </div>
+        </div>
+
+        <!-- Section Title -->
+        <div class="flex items-center justify-between mb-3 px-1">
+            <h3 class="font-bold text-slate-800 text-lg flex items-center gap-2">
+                <i class="fa-solid fa-book-open text-resto-primary"></i> Daftar Menu
+            </h3>
+            <span class="text-xs text-slate-500 bg-slate-200 px-2 py-1 rounded-full font-medium">Mata Uang SAR</span>
+        </div>
+
+        <div id="menu-container" class="space-y-3">
+            <!-- Menu items generated dynamically by JavaScript -->
+        </div>
+
+        <div class="mt-6 bg-white rounded-2xl p-4 border border-slate-200 shadow-sm">
+            <h3 class="font-bold text-slate-800 text-md mb-3 flex items-center gap-2 border-b pb-2">
+                <i class="fa-solid fa-user-pen text-resto-primary"></i> Informasi Pemesan
+            </h3>
+            <div class="space-y-3 text-sm">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1" for="customer-name">
+                        Nama Pemesan <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
+                            <i class="fa-regular fa-user"></i>
+                        </span>
+                        <input type="text" id="customer-name" placeholder="Masukkan nama Anda" 
+                            class="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-800 focus:outline-none focus:ring-2 focus:ring-resto-primary focus:bg-white transition">
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <label class="block text-xs font-semibold text-slate-600" for="customer-address">
+                            Alamat / Nomor Meja / Catatan Khusus
+                        </label>
+                        <button type="button" onclick="getGPSLocation()" class="text-xs text-emerald-800 font-bold flex items-center gap-1 bg-emerald-100 hover:bg-emerald-200 px-2 py-1 rounded-lg transition active:scale-95">
+                            <i class="fa-solid fa-crosshairs text-emerald-600"></i> Deteksi Lokasi GPS
+                        </button>
+                    </div>
+                    <div class="relative">
+                        <span class="absolute top-2.5 left-0 pl-3 text-slate-400">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </span>
+                        <textarea id="customer-address" rows="2" placeholder="Contoh: Kamar No 12 / Meja 04 / Pedas sedang" 
+                            class="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-800 focus:outline-none focus:ring-2 focus:ring-resto-primary focus:bg-white transition resize-none"></textarea>
+                    </div>
+                    <div id="gps-status" class="text-xs font-medium text-emerald-700 mt-1 hidden flex items-center gap-1">
+                        <i class="fa-solid fa-circle-check"></i> <span id="gps-status-text">Lokasi terdeteksi!</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <div class="fixed bottom-0 left-0 right-0 z-50 p-3 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-[0_-4px_20px_rgba(0,0,0,0.1)]">
+        <div class="max-w-md mx-auto space-y-2">
+            
+            <!-- Price Summary Row -->
+            <div class="flex justify-between items-center px-1">
+                <div>
+                    <div class="text-xs text-slate-500">Total Pesanan (<span id="total-items-count" class="font-bold text-slate-700">0</span> item):</div>
+                    <div class="text-xl font-extrabold text-resto-primary leading-tight">
+                        <span id="grand-total">0</span> <span class="text-xs font-bold">SAR</span>
+                    </div>
+                </div>
+                <button onclick="resetCart()" class="text-xs text-slate-500 hover:text-red-500 flex items-center gap-1 transition px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-red-50">
+                    <i class="fa-solid fa-rotate-left"></i> Reset
+                </button>
+            </div>
+
+            <!-- WhatsApp Order Button -->
+            <button id="btn-whatsapp" onclick="sendWhatsAppOrder()" 
+                class="w-full bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 transition duration-200 transform active:scale-[0.99] text-base">
+                <i class="fa-brands fa-whatsapp text-2xl"></i>
+                <span>Kirim Pesanan via WhatsApp</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Notification Toast Element -->
+    <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white text-xs px-4 py-2.5 rounded-full shadow-xl opacity-0 pointer-events-none transition-all duration-300">
+        <span id="toast-message">Notifikasi</span>
+    </div>
+
+    <script>
+        // Resto Menu Data
+        const menuData = [
+            { id: 1, name: "Beef Bakso (Bakso Daging)", price: 25, icon: "fa-bowl-food" },
+            { id: 2, name: "Soto Ayam + Perkedel", price: 15, icon: "fa-bowl-rice" },
+            { id: 3, name: "Soto Daging + Perkedel", price: 18, icon: "fa-bowl-food" },
+            { id: 4, name: "Rendang + Nasi dan Lalapan", price: 25, icon: "fa-utensils" },
+            { id: 5, name: "Rendang Only", price: 20, icon: "fa-utensils" },
+            { id: 6, name: "Sate Ayam + Lontong", price: 20, icon: "fa-drumstick-bite" },
+            { id: 7, name: "Pepes Ikan Kembung", price: 12, icon: "fa-fish" },
+            { id: 8, name: "Ayam Goreng Lamongan + Nasi", price: 20, icon: "fa-drumstick-bite" },
+            { id: 9, name: "Kolak Pisang Manis", price: 10, icon: "fa-ice-cream" },
+            { id: 10, name: "Krupuk Gendar", price: 10, icon: "fa-ice-cream" },
+            { id: 11, name: "Kripik Tempe Sagu Pedas", price: 15, icon: "fa-ice-cream" },
+            { id: 12, name: "Kripik Tempe Sagu Normal", price: 13, icon: "fa-ice-cream" },
+            { id: 13, name: "Tauge", price: 6, icon: "fa-ice-cream" },
+            { id: 14, name: "Tempe", price: 7, icon: "fa-ice-cream", outOfStock: true }
+        ];
+
+        // WhatsApp target number
+        const whatsappNumber = "966559282647";
+
+        // Store quantities & location link
+        const quantities = {};
+        let userGpsUrl = "";
+
+        function initQuantities() {
+            menuData.forEach(function(item) {
+                quantities[item.id] = 0;
+            });
+        }
+
+        function getGPSLocation() {
+            const gpsStatus = document.getElementById('gps-status');
+            const gpsStatusText = document.getElementById('gps-status-text');
+
+            if (!navigator.geolocation) {
+                showToast("Fitur GPS tidak didukung di perangkat/browser ini.");
+                return;
+            }
+
+            if (gpsStatus && gpsStatusText) {
+                gpsStatus.classList.remove('hidden');
+                gpsStatusText.innerText = "Mendeteksi posisi lokasi Anda...";
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    userGpsUrl = "https://maps.google.com/?q=" + lat + "," + lng;
+
+                    if (gpsStatusText) {
+                        gpsStatusText.innerText = "Lokasi GPS berhasil ditemukan!";
+                    }
+                    showToast("Lokasi GPS berhasil didapatkan.");
+                },
+                function(error) {
+                    if (gpsStatusText) {
+                        gpsStatusText.innerText = "Gagal mengambil GPS. Pastikan izin lokasi diaktifkan.";
+                    }
+                    showToast("Gagal mengambil lokasi GPS.");
+                },
+                { enableHighAccuracy: true, timeout: 10000 }
+            );
+        }
+
+        // Show Toast Notification
+        function showToast(text) {
+            const toast = document.getElementById('toast');
+            const msg = document.getElementById('toast-message');
+            if (!toast || !msg) return;
+            
+            msg.innerText = text;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            toast.classList.add('opacity-100');
+
+            setTimeout(function() {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 2500);
+        }
+
+        // Update order item count and grand total SAR
+        function updateSummary() {
+            let totalItems = 0;
+            let grandTotal = 0;
+
+            menuData.forEach(function(item) {
+                const qty = quantities[item.id] || 0;
+                totalItems += qty;
+                grandTotal += qty * item.price;
+            });
+
+            const totalItemsEl = document.getElementById('total-items-count');
+            const grandTotalEl = document.getElementById('grand-total');
+
+            if (totalItemsEl) totalItemsEl.innerText = totalItems;
+            if (grandTotalEl) grandTotalEl.innerText = grandTotal;
+        }
+
+        // Render menu items into DOM
+        function renderMenu() {
+            const container = document.getElementById('menu-container');
+            if (!container) return;
+            
+            container.innerHTML = '';
+
+            menuData.forEach(function(item) {
+                const qty = quantities[item.id] || 0;
+                const itemTotal = qty * item.price;
+                const isOut = item.outOfStock === true;
+                
+                const cardHtml = 
+                    '<div class="bg-white rounded-2xl p-3.5 border ' + (isOut ? 'border-slate-200 opacity-75' : (qty > 0 ? 'border-resto-primary ring-1 ring-resto-primary/30 shadow-md' : 'border-slate-200 shadow-sm')) + ' transition duration-200 flex items-center justify-between gap-3">' +
+                        '<div class="flex-1 min-w-0">' +
+                            '<div class="flex items-center gap-2">' +
+                                '<i class="fa-solid ' + item.icon + ' text-resto-primary text-xs"></i>' +
+                                '<h4 class="font-bold text-slate-800 text-sm leading-snug truncate">' + item.name + '</h4>' +
+                                (isOut ? '<span class="bg-red-100 text-red-600 text-[10px] font-extrabold px-2 py-0.5 rounded-full shrink-0">Habis</span>' : '') +
+                            '</div>' +
+                            '<div class="mt-1 flex items-baseline gap-2">' +
+                                '<span class="text-emerald-700 font-extrabold text-base">' + item.price + ' <span class="text-xs font-semibold">SAR</span></span>' +
+                                (qty > 0 ? '<span class="text-xs text-slate-400">Total: <strong class="text-slate-700">' + itemTotal + ' SAR</strong></span>' : '') +
+                            '</div>' +
+                        '</div>' +
+
+                        '<div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">' +
+                            '<button onclick="updateQty(' + item.id + ', -1)" ' +
+                                'class="w-8 h-8 rounded-lg ' + (qty > 0 ? 'bg-white text-slate-800 shadow-sm active:bg-slate-200' : 'bg-transparent text-slate-300 cursor-not-allowed') + ' flex items-center justify-center font-bold text-sm transition" ' +
+                                (qty === 0 || isOut ? 'disabled' : '') + '>' +
+                                '<i class="fa-solid fa-minus text-xs"></i>' +
+                            '</button>' +
+                            
+                            '<span class="w-8 text-center font-extrabold text-sm ' + (qty > 0 ? 'text-resto-primary' : 'text-slate-400') + '">' + qty + '</span>' +
+
+                            '<button onclick="updateQty(' + item.id + ', 1)" ' +
+                                'class="w-8 h-8 rounded-lg ' + (isOut ? 'bg-slate-300 text-slate-500 cursor-not-allowed' : 'bg-resto-primary text-white shadow-sm active:bg-resto-dark') + ' flex items-center justify-center font-bold text-sm transition" ' +
+                                (isOut ? 'disabled' : '') + '>' +
+                                '<i class="fa-solid fa-plus text-xs"></i>' +
+                            '</button>' +
+                        '</div>' +
+                    '</div>';
+
+                container.insertAdjacentHTML('beforeend', cardHtml);
+            });
+
+            updateSummary();
+        }
+
+        function updateQty(id, change) {
+            const menuItem = menuData.find(function(m) { return m.id === id; });
+            if (menuItem && menuItem.outOfStock && change > 0) {
+                showToast("Maaf, stok menu ini sedang habis.");
+                return;
+            }
+
+            if (typeof quantities[id] === 'undefined') {
+                quantities[id] = 0;
+            }
+            const newQty = quantities[id] + change;
+            if (newQty >= 0) {
+                quantities[id] = newQty;
+                renderMenu();
+            }
+        }
+
+        // Reset all quantities to 0
+        function resetCart() {
+            menuData.forEach(function(item) {
+                quantities[item.id] = 0;
+            });
+            renderMenu();
+            showToast("Keranjang pesanan telah dikosongkan.");
+        }
+
+        function sendWhatsAppOrder() {
+            const selectedItems = [];
+            let totalSAR = 0;
+            let totalItemCount = 0;
+
+            menuData.forEach(function(item) {
+                const qty = quantities[item.id] || 0;
+                if (qty > 0) {
+                    const subtotal = qty * item.price;
+                    selectedItems.push("• *" + item.name + "*\n  " + qty + "x @ " + item.price + " SAR = *" + subtotal + " SAR*");
+                    totalSAR += subtotal;
+                    totalItemCount += qty;
+                }
+            });
+
+            if (selectedItems.length === 0) {
+                showToast("Silakan pilih minimal 1 menu makanan terlebih dahulu (+).");
+                return;
+            }
+
+            const nameInput = document.getElementById('customer-name');
+            const addressInput = document.getElementById('customer-address');
+            
+            const name = nameInput ? nameInput.value.trim() : "";
+            const address = addressInput ? addressInput.value.trim() : "";
+
+            if (!name) {
+                showToast("Mohon isi Nama Pemesan terlebih dahulu.");
+                if (nameInput) nameInput.focus();
+                return;
+            }
+
+            // Build structured WhatsApp message
+            let message = "*PESANAN BARU - FULL FOOD RESTO ALAHSAA*\n";
+            message += "-------------------------------------------\n";
+            message += "👤 *Nama Pemesan:* " + name + "\n";
+            if (address) {
+                message += "📍 *Alamat/Meja/Catatan:* " + address + "\n";
+            }
+            if (userGpsUrl) {
+                message += "🗺️ *Lokasi GPS:* " + userGpsUrl + "\n";
+            }
+            message += "-------------------------------------------\n\n";
+            message += "📋 *Rincian Pesanan:*\n";
+            message += selectedItems.join("\n\n") + "\n\n";
+            message += "-------------------------------------------\n";
+            message += "🛍️ *Total Item:* " + totalItemCount + " porsi\n";
+            message += "💰 *TOTAL BAYAR:* *" + totalSAR + " SAR*\n";
+            message += "-------------------------------------------\n";
+            message += "Terima kasih! Mohon konfirmasi ketersediaan dan total pembayarannya 🙏";
+
+            const encodedText = encodeURIComponent(message);
+            const waUrl = "https://wa.me/" + whatsappNumber + "?text=" + encodedText;
+
+            window.open(waUrl, '_blank');
+        }
+
+        // Initialize application on load
+        window.onload = function() {
+            initQuantities();
+            renderMenu();
+        };
+    </script>
+</body>
+</html>
